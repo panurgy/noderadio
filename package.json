@@ -13,7 +13,7 @@
   },
   "homepage": "http://panurgynet.blogspot.com",
   "repository": {
-    "type": "git",
+    "type": "git"
   },
   "engines": {
     "node": ">= 0.6.0",
