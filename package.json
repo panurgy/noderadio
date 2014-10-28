@@ -1,0 +1,36 @@
+{
+  "name": "NodeRadio",
+  "version": "1.0.0",
+  "description": "panurgynet.blogspot.com",
+  "keywords": [
+    "panurgy",
+    "Node.js",
+    "application"
+  ],
+  "author": {
+    "name": "Panurgy",
+    "url": "http://panurgynet.blogspot.com/"
+  },
+  "homepage": "http://panurgynet.blogspot.com",
+  "repository": {
+    "type": "git",
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "dependencies": {
+    "curlrequest": "~0.3.10",
+    "dateformat": "~1.0.7-1.2.3",
+    "express": "^4.10.0",
+    "mongodb": "~1.3.20",
+    "mongoskin": "~0.6.0",
+    "optimist": "~0.6.0",
+    "shell-quote": "~1.4.0"
+  },
+  "devDependencies": {
+  },
+  "bundleDependencies": [],
+  "private": true,
+  "main": "server.js"
+}
