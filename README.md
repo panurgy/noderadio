@@ -1,7 +1,7 @@
 Panurgy NodeRadio
 =========
 
-A mostly-useless demo app that collects the songs played byb various radio stations.
+A mostly-useless demo app that collects the songs played by various radio stations.
 
 Setup
 ----

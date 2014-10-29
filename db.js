@@ -23,6 +23,7 @@ exports.db = db;
 exports.songHistory = function(callsign, res) {
     // enforce a hard limit of 1000 records returned to avoid returning the
     // entire database.
+    callsign = callsign.toUpperCase();
     db.collection('songHistory').find({callsign:callsign}, {sort:{when:-1}, limit:1000}).toArray(function(e, stuff) {
         if (e) {
             res.status(500).send(e);

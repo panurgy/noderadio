@@ -50,7 +50,7 @@ if (process.env.VCAP_APP_PORT && (hostingProvider !== 'bluemix') ){
 }
 
 var isProd = false;
-var ipaddress = '127.0.0.1';
+var ipaddress = '0.0.0.0';
 var listenPort = 3000;
 
 if (hostingProvider === 'rhcloud') {
