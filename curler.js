@@ -7,6 +7,7 @@
 var curl = require('curlrequest');
 var config = require('./config');
 var dbdriver = require('./db');
+var iTunesHelper = require('./iTunesHelper');
 
 var DEBUG = false;
 
@@ -43,7 +44,7 @@ exports.fetch = function(callsign, stationCurrentSongInfo, callback) {
             try {
                 data = JSON.parse(result);
             } catch (e) {
-                console.log("Unable to parse JSON for " + callsign 
+                console.log("Unable to parse JSON for " + callsign
                     +": " + result);
                 return;
             }
@@ -59,15 +60,31 @@ exports.fetch = function(callsign, stationCurrentSongInfo, callback) {
             }
 
             var now = new Date();
-            console.log(now.getTime() + ": " +callsign+" = " + songName + " (by) " + artist);
-
             var entry = {
                 when: now.getTime(),
                 callsign: callsign,
                 songTitle: songName,
                 artist: artist
             };
-            exports.persistCurrent(entry);
+
+
+
+            iTunesHelper.findYearSongReleased(entry.artist, entry.songTitle)
+            .then(function(releaseYear) {
+                entry.releaseYear = releaseYear;
+                exports.persistCurrent(entry);
+            })
+            .catch(function(err) {
+                // the iTunes lookup failed - oh well.
+                console.log("Unable to look up a song using iTunes",
+                    entry, err);
+            })
+            .finally(function() {
+                console.log(entry);
+            })
+            .done()
+
+
         }
     });
 };
@@ -77,7 +94,7 @@ exports.persistCurrent = function(entry) {
     //    song within an object, but that's not scalable. Ideally, we'd
     //    ask a REDIS cluster what's currently playing for a given station.
     // Since we don't have that, we'll ask the database.
-    dbdriver.db.collection('songHistory').find({callsign:entry.callsign}, 
+    dbdriver.db.collection('songHistory').find({callsign:entry.callsign},
             {sort: {when:-1}, limit:5}).toArray(function(err, array) {
         if (err) {
             // umm, bummer?
@@ -94,7 +111,7 @@ exports.persistCurrent = function(entry) {
             var len = array.length;
             while (i < len) {
                 if (DEBUG) {
-                    console.log(entry.callsign +": Comparing currrent song " + 
+                    console.log(entry.callsign +": Comparing currrent song " +
                     entry.songTitle + " to previous song " + array[i].songTitle);
                 }
                 if ( array[i].songTitle === entry.songTitle &&
@@ -111,15 +128,15 @@ exports.persistCurrent = function(entry) {
         if (saveit) {
             if (!config.isProd) {
                 console.log(entry.callsign  +": PRETENDING to save song "
-                        + entry.songTitle +' (by) ' 
-                        + entry.artist);
+                    + entry.songTitle +' (by) '
+                    + entry.artist);
                 return;
             }
 
             if (DEBUG) {
                 console.log(entry.callsign  +": Saving song "
-                        + entry.songTitle +' (by) ' 
-                        + entry.artist);
+                    + entry.songTitle +' (by) '
+                    + entry.artist);
             }
 
             // this station is playing a new song!

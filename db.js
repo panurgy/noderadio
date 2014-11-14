@@ -1,5 +1,7 @@
+var Q = require('q');  // Q for simplicity, bluebird when it really matters.
+
 /**
- *  Compopnent that provides access to the song history. 
+ *  Module that provides access to the song history.
  *  This implementation is tied to MongoDB, but any ol'
  *  persistence mechanism will sufffice.
  */
@@ -17,19 +19,22 @@ if (!db) {
 exports.db = db;
 
 /**
- * API that returns a listing (up to 1000) of the most recently played 
+ * API that returns a promise which eventually receives a listing
+ * (up to 1000) of the most recently played
  * songs for the specified callsign (like WXYZ)
  */
-exports.songHistory = function(callsign, res) {
+exports.songHistory = function(callsign) {
+    var deferred = Q.defer();
+
     // enforce a hard limit of 1000 records returned to avoid returning the
     // entire database.
     callsign = callsign.toUpperCase();
     db.collection('songHistory').find({callsign:callsign}, {sort:{when:-1}, limit:1000}).toArray(function(e, stuff) {
         if (e) {
-            res.status(500).send(e);
+            deferred.reject(e);
         } else {
-            res.send(stuff);
+            deferred.resolve(stuff);
         }
     });
+    return deferred.promise;
 };
-

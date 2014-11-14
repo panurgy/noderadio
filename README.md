@@ -13,6 +13,8 @@ The following back-end services are needed to get things up and running:
 DB_URL=mongodb://dbuser:dbpasswd@aserver.mongolab.com:someport/instanceName
 ```
 
+  - The database needs two collections: __stations__ and __songHistory__.
+
   - Since this is a lame demo, there isn't an interactive Station Definition editor (yet). Thus, in that Mongo Database, create a **collection** named **stations**, and manually add a JSON document/record like this:
 ```js
 {

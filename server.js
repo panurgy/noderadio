@@ -8,6 +8,7 @@ var express = require('express');
 var fs      = require('fs');
 var os      = require('os');
 var config = require('./config');
+var iTunesHelper = require('./iTunesHelper');
 
 var songdb, flareData, dbBummer;
 try {
@@ -84,7 +85,16 @@ app.get("/flare/:callsign", function(req, res) {
 //    station/callsign  (like WXYZ)
 app.get("/db/:callsign", function(req, res) {
     if (songdb) {
-        songdb.songHistory(req.params.callsign, res);
+        songdb.songHistory(req.params.callsign)
+        .then(function(stuff) {
+            res.send(stuff);
+        })
+        .catch(function(err){
+            console.log("Unable to query song history", err);
+            res.status(500).send(err);
+        })
+        .done();
+
     } else {
         res.send(JSON.stringify(dbBummer));
     }
@@ -106,6 +116,4 @@ app.listen(config.listenPort, config.ipaddress, function() {
     }
 
 });
-
-
 
