@@ -38,3 +38,21 @@ exports.songHistory = function(callsign) {
     });
     return deferred.promise;
 };
+
+
+/**
+ * Returns a promise that contains the response of the database search from
+ * the "songHistory" collection.
+ */
+exports.findSong = function(artist, songTitle) {
+    var deferred = Q.defer();
+
+    db.collection('songHistory').find({artist: artist, songTitle: songTitle}, {limit: 5}).toArray(function(err, array) {
+        // yeah, need to use bluebird's promisify routine ...
+        console.log("found", array);
+        if (err) { deferred.reject(err); }
+        else deferred.resolve(array);
+    });
+    return deferred.promise;
+}
+    
