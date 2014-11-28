@@ -1,4 +1,5 @@
 *.bat
 node_modules
 _local
+_deploy
 *~

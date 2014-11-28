@@ -67,6 +67,11 @@ if (hostingProvider === 'rhcloud') {
     ipaddress = process.env.VCAP_APP_HOST || ipaddress;
     listenPort = process.env.VCAP_APP_PORT || listenPort;
     isProd = true;
+} else if (process.env.PORT) {
+    hostingProvider = 'heroku';
+    // heroku 
+    listenPort = process.env.PORT;
+    isProd = true;
 }
 
 

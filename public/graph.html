@@ -71,8 +71,18 @@ body {
 
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
+<script src="http://d3js.org/d3.v3.min.js"></script>
 
 <script>
+var fetchData = function(callsign, when) {
+    $('#statusMessage').html('Loading data for ' + callsign +'   <img src="loading.gif"/>');
+    var queryString = "";
+    if (when) {
+        queryString = "?sinceWhen="+when;
+    }
+    d3.json("/flare/" + callsign +queryString, showFlareData);
+    d3.select(self.frameElement).style("height", height + "px");
+};
 
 $(function() {
     var now = new Date().getTime();
@@ -92,10 +102,6 @@ $(function() {
 
     fetchData('KXXR', then.getTime());
 });
-</script>
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script>
 
 var width = 700,
     height = 8000;
@@ -146,17 +152,6 @@ var showFlareData = function(error, root) {
       .text(function(d) { return d.name; });
     $('#statusMessage').html('');
 };
-
-var fetchData = function(callsign, when) {
-    $('#statusMessage').html('Loading data for ' + callsign +'   <img src="loading.gif"/>');
-    var queryString = "";
-    if (when) {
-        queryString = "?sinceWhen="+when;
-    }
-    d3.json("/flare/" + callsign +queryString, showFlareData);
-    d3.select(self.frameElement).style("height", height + "px");
-};
-
 
 
 </script>
