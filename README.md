@@ -48,5 +48,5 @@ DB_URL=mongodb://dbuser:dbpasswd@aserver.mongolab.com:someport/instanceName
 
 For more info
 ----
-Check out [my blog](panurgynet.blogspot.com) for more (or less) useful info about this app/demo.
+Check out [my blog](http://panurgynet.blogspot.com/2013/12/which-radio-station-really-has-best.html) for more (or less) useful info about this app/demo.
 
